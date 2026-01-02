@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/enbiyagoral/kubectl-pocket/pkg/k8s"
 	"github.com/spf13/cobra"
 )
 
@@ -12,7 +13,24 @@ var (
 	Version   = "dev"
 	GitCommit = "none"
 	BuildDate = "unknown"
+
+	// Global flags
+	kubeconfig string
+	namespace  string
+
+	// K8s client (initialized lazily)
+	k8sClient *k8s.Client
 )
+
+// GetK8sClient returns a Kubernetes client, creating one if needed
+func GetK8sClient() (*k8s.Client, error) {
+	if k8sClient != nil {
+		return k8sClient, nil
+	}
+	var err error
+	k8sClient, err = k8s.NewClient(kubeconfig, namespace)
+	return k8sClient, err
+}
 
 var rootCmd = &cobra.Command{
 	Use:   "kubectl-pocket",
@@ -40,4 +58,8 @@ func Execute() error {
 func init() {
 	rootCmd.SetOut(os.Stdout)
 	rootCmd.SetErr(os.Stderr)
+
+	// Global flags
+	rootCmd.PersistentFlags().StringVar(&kubeconfig, "kubeconfig", "", "path to kubeconfig file")
+	rootCmd.PersistentFlags().StringVarP(&namespace, "namespace", "n", "", "kubernetes namespace")
 }
