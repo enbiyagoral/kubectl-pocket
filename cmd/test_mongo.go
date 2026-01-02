@@ -161,7 +161,12 @@ func runMongoShell(client *k8s.Client, ns, podName, connStr string) error {
 	if err != nil {
 		return fmt.Errorf("failed to set raw terminal: %w", err)
 	}
-	defer term.Restore(int(os.Stdin.Fd()), oldState)
+	defer func() {
+		if restoreErr := term.Restore(int(os.Stdin.Fd()), oldState); restoreErr != nil {
+			// Log error but don't fail - terminal may already be restored
+			fmt.Fprintf(os.Stderr, "Warning: failed to restore terminal: %v\n", restoreErr)
+		}
+	}()
 
 	execOpts := k8s.ExecOptions{
 		Namespace: ns,

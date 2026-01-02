@@ -92,7 +92,11 @@ func (c *Client) GetPodLogs(ctx context.Context, namespace, name string) (string
 	if err != nil {
 		return "", err
 	}
-	defer logs.Close()
+	defer func() {
+		if closeErr := logs.Close(); closeErr != nil {
+			// Log error but don't fail - stream may already be closed
+		}
+	}()
 
 	buf, err := io.ReadAll(logs)
 	if err != nil {
