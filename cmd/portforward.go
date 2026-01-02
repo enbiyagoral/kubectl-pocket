@@ -28,8 +28,8 @@ var dbAliases = map[string]struct {
 }
 
 var pfCmd = &cobra.Command{
-	Use:     "pf <database> [local-port]",
-	Aliases: []string{"portforward", "port-forward"},
+	Use:     "port-forward <database> [local-port]",
+	Aliases: []string{"pf", "portforward"},
 	Short:   "Quick port-forward to database services",
 	Long: `Quickly set up port-forwarding to supported database services.
 
@@ -39,10 +39,10 @@ Supported databases:
   - postgres : 5432
 
 Examples:
-  kubectl pocket pf redis              # localhost:6379 -> redis:6379
-  kubectl pocket pf redis 16379        # localhost:16379 -> redis:6379
-  kubectl pocket pf mongo              # localhost:27017 -> mongo:27017
-  kubectl pocket pf postgres 15432     # localhost:15432 -> postgres:5432`,
+  kubectl pocket port-forward redis              # localhost:6379 -> redis:6379
+  kubectl pocket port-forward redis 16379        # localhost:16379 -> redis:6379
+  kubectl pocket port-forward mongo              # localhost:27017 -> mongo:27017
+  kubectl pocket port-forward postgres 15432     # localhost:15432 -> postgres:5432`,
 	Args: cobra.RangeArgs(1, 2),
 	RunE: runPortForward,
 }
@@ -50,7 +50,7 @@ Examples:
 var pfAddress string
 
 func init() {
-	rootCmd.AddCommand(pfCmd)
+	// rootCmd.AddCommand is handled in root.go addSubcommands()
 	pfCmd.Flags().StringVar(&pfAddress, "address", "127.0.0.1", "local address to bind")
 }
 

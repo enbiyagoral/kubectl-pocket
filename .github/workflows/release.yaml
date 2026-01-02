@@ -68,6 +68,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Update new version in krew-index
+        uses: rajatjindal/krew-release-bot@v0.0.47
+
       - name: Update Krew manifest
         run: |
           VERSION=${{ inputs.version }}
@@ -95,7 +98,7 @@ jobs:
           /linux_arm64\.tar\.gz$/ { next_sha256=linux_arm64; next }
           /windows_amd64\.tar\.gz$/ { next_sha256=windows_amd64; next }
           /windows_arm64\.tar\.gz$/ { next_sha256=windows_arm64; next }
-          /sha256:/ && next_sha256 != "" { gsub(/sha256: ".*"/, "sha256: \"" next_sha256 "\""); next_sha256="" }
+          /sha256:/ && next_sha256 != "" { gsub(/sha256: .*/, "sha256: " next_sha256); next_sha256="" }
           { print }
           ' plugins/pocket.yaml > plugins/pocket.yaml.tmp && mv plugins/pocket.yaml.tmp plugins/pocket.yaml
 

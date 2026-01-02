@@ -23,6 +23,4 @@ Examples:
   kubectl pocket test redis redis://redis-svc:6379`,
 }
 
-func init() {
-	rootCmd.AddCommand(testCmd)
-}
+// init is handled in root.go addSubcommands()
