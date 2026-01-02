@@ -92,17 +92,18 @@ func (c *Client) GetPodLogs(ctx context.Context, namespace, name string) (string
 	if err != nil {
 		return "", err
 	}
-	defer func() {
-		if closeErr := logs.Close(); closeErr != nil {
-			// Log error but don't fail - stream may already be closed
-		}
-	}()
+	defer closeStream(logs)
 
 	buf, err := io.ReadAll(logs)
 	if err != nil {
 		return "", err
 	}
 	return string(buf), nil
+}
+
+// closeStream safely closes an io.ReadCloser, ignoring errors
+func closeStream(closer io.Closer) {
+	_ = closer.Close()
 }
 
 // ExecOptions holds options for executing a command in a pod

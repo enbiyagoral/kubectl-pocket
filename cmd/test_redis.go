@@ -163,12 +163,7 @@ func runRedisShell(client *k8s.Client, ns, podName, host, port, password string)
 	if err != nil {
 		return fmt.Errorf("failed to set raw terminal: %w", err)
 	}
-	defer func() {
-		if restoreErr := term.Restore(int(os.Stdin.Fd()), oldState); restoreErr != nil {
-			// Log error but don't fail - terminal may already be restored
-			fmt.Fprintf(os.Stderr, "Warning: failed to restore terminal: %v\n", restoreErr)
-		}
-	}()
+	defer restoreTerminal(oldState)
 
 	// Build redis-cli command
 	redisCliCmd := []string{"redis-cli", "-h", host, "-p", port}
