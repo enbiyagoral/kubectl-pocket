@@ -32,6 +32,17 @@ jobs:
         with:
           go-version: '1.25.4'
 
+      - name: Build test (all platforms)
+        run: |
+          echo "Testing build for all platforms before release..."
+          GOOS=linux GOARCH=amd64 go build -v ./...
+          GOOS=linux GOARCH=arm64 go build -v ./...
+          GOOS=darwin GOARCH=amd64 go build -v ./...
+          GOOS=darwin GOARCH=arm64 go build -v ./...
+          GOOS=windows GOARCH=amd64 go build -v ./...
+          GOOS=windows GOARCH=arm64 go build -v ./...
+          echo "✅ All platforms build successfully"
+
       - name: Create and push tag
         run: |
           git config user.name "github-actions[bot]"
@@ -50,11 +61,33 @@ jobs:
       - name: Update Krew manifest
         run: |
           VERSION=${{ inputs.version }}
-          SHA256=$(grep "kubectl-pocket_darwin_arm64.tar.gz" dist/checksums.txt | cut -d ' ' -f 1)
-
+          
           sed -i '' "s|version: v.*|version: ${VERSION}|" plugins/pocket.yaml
+          
           sed -i '' "s|/download/v[^/]*/|/download/${VERSION}/|" plugins/pocket.yaml
-          sed -i '' "s|sha256: .*|sha256: \"${SHA256}\"|" plugins/pocket.yaml
+          
+          SHA256_DARWIN_ARM64=$(grep "kubectl-pocket_darwin_arm64.tar.gz" dist/checksums.txt | cut -d ' ' -f 1)
+          SHA256_DARWIN_AMD64=$(grep "kubectl-pocket_darwin_amd64.tar.gz" dist/checksums.txt | cut -d ' ' -f 1)
+          SHA256_LINUX_AMD64=$(grep "kubectl-pocket_linux_amd64.tar.gz" dist/checksums.txt | cut -d ' ' -f 1)
+          SHA256_LINUX_ARM64=$(grep "kubectl-pocket_linux_arm64.tar.gz" dist/checksums.txt | cut -d ' ' -f 1)
+          SHA256_WINDOWS_AMD64=$(grep "kubectl-pocket_windows_amd64.tar.gz" dist/checksums.txt | cut -d ' ' -f 1)
+          SHA256_WINDOWS_ARM64=$(grep "kubectl-pocket_windows_arm64.tar.gz" dist/checksums.txt | cut -d ' ' -f 1)
+          
+          awk -v darwin_arm64="${SHA256_DARWIN_ARM64}" \
+              -v darwin_amd64="${SHA256_DARWIN_AMD64}" \
+              -v linux_amd64="${SHA256_LINUX_AMD64}" \
+              -v linux_arm64="${SHA256_LINUX_ARM64}" \
+              -v windows_amd64="${SHA256_WINDOWS_AMD64}" \
+              -v windows_arm64="${SHA256_WINDOWS_ARM64}" '
+          /darwin_arm64\.tar\.gz$/ { next_sha256=darwin_arm64; next }
+          /darwin_amd64\.tar\.gz$/ { next_sha256=darwin_amd64; next }
+          /linux_amd64\.tar\.gz$/ { next_sha256=linux_amd64; next }
+          /linux_arm64\.tar\.gz$/ { next_sha256=linux_arm64; next }
+          /windows_amd64\.tar\.gz$/ { next_sha256=windows_amd64; next }
+          /windows_arm64\.tar\.gz$/ { next_sha256=windows_arm64; next }
+          /sha256:/ && next_sha256 != "" { gsub(/sha256: ".*"/, "sha256: \"" next_sha256 "\""); next_sha256="" }
+          { print }
+          ' plugins/pocket.yaml > plugins/pocket.yaml.tmp && mv plugins/pocket.yaml.tmp plugins/pocket.yaml
 
       - name: Commit and push Krew manifest
         run: |

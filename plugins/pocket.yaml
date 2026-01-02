@@ -17,5 +17,40 @@ spec:
         os: darwin
         arch: arm64
     uri: https://github.com/enbiyagoral/kubectl-pocket/releases/download/v0.1.0/kubectl-pocket_darwin_arm64.tar.gz
-    sha256: "fb86e20fa66e6b3438f3966c9388f37e700e4a89d187d8be782acbfc73110b49"
+    sha256: "PLACEHOLDER_DARWIN_ARM64"
     bin: kubectl-pocket
+  - selector:
+      matchLabels:
+        os: darwin
+        arch: amd64
+    uri: https://github.com/enbiyagoral/kubectl-pocket/releases/download/v0.1.0/kubectl-pocket_darwin_amd64.tar.gz
+    sha256: "PLACEHOLDER_DARWIN_AMD64"
+    bin: kubectl-pocket
+  - selector:
+      matchLabels:
+        os: linux
+        arch: amd64
+    uri: https://github.com/enbiyagoral/kubectl-pocket/releases/download/v0.1.0/kubectl-pocket_linux_amd64.tar.gz
+    sha256: "PLACEHOLDER_LINUX_AMD64"
+    bin: kubectl-pocket
+  - selector:
+      matchLabels:
+        os: linux
+        arch: arm64
+    uri: https://github.com/enbiyagoral/kubectl-pocket/releases/download/v0.1.0/kubectl-pocket_linux_arm64.tar.gz
+    sha256: "PLACEHOLDER_LINUX_ARM64"
+    bin: kubectl-pocket
+  - selector:
+      matchLabels:
+        os: windows
+        arch: amd64
+    uri: https://github.com/enbiyagoral/kubectl-pocket/releases/download/v0.1.0/kubectl-pocket_windows_amd64.tar.gz
+    sha256: "PLACEHOLDER_WINDOWS_AMD64"
+    bin: kubectl-pocket.exe
+  - selector:
+      matchLabels:
+        os: windows
+        arch: arm64
+    uri: https://github.com/enbiyagoral/kubectl-pocket/releases/download/v0.1.0/kubectl-pocket_windows_arm64.tar.gz
+    sha256: "PLACEHOLDER_WINDOWS_ARM64"
+    bin: kubectl-pocket.exe
