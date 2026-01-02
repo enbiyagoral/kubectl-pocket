@@ -4,6 +4,7 @@ go 1.25.4
 
 require (
 	github.com/spf13/cobra v1.8.1
+	golang.org/x/term v0.38.0
 	k8s.io/api v0.29.0
 	k8s.io/apimachinery v0.29.0
 	k8s.io/client-go v0.29.0
@@ -36,7 +37,6 @@ require (
 	golang.org/x/net v0.17.0 // indirect
 	golang.org/x/oauth2 v0.10.0 // indirect
 	golang.org/x/sys v0.39.0 // indirect
-	golang.org/x/term v0.38.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect

@@ -1,0 +1,21 @@
+apiVersion: krew.googlecontainertools.github.com/v1alpha2
+kind: Plugin
+metadata:
+  name: pocket
+spec:
+  version: v0.1.0
+  homepage: https://github.com/enbiyagoral/kubectl-pocket
+  shortDescription: Test database connections and open shells in Kubernetes
+  description: |
+    A kubectl plugin for common database operations.
+    - Test MongoDB, PostgreSQL, Redis connections
+    - Open interactive database shells
+    - Quick port-forward to database services
+  platforms:
+  - selector:
+      matchLabels:
+        os: darwin
+        arch: arm64
+    uri: https://github.com/enbiyagoral/kubectl-pocket/releases/download/v0.1.0/kubectl-pocket_darwin_arm64.tar.gz
+    sha256: "PLACEHOLDER"
+    bin: kubectl-pocket
