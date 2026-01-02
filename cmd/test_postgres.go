@@ -65,7 +65,7 @@ func runPostgresTest(cmd *cobra.Command, args []string) error {
 	podConfig := k8s.PodConfig{
 		Name:      podName,
 		Namespace: ns,
-		Image:     "postgres:16-alpine",
+		Image:     "postgres:14-alpine",
 		Command:   []string{"psql"},
 		Args: []string{
 			connectionString,
@@ -129,7 +129,7 @@ func runPostgresShell(client *k8s.Client, ns, podName, connStr string) error {
 	podConfig := k8s.PodConfig{
 		Name:      podName,
 		Namespace: ns,
-		Image:     "postgres:16-alpine",
+		Image:     "postgres:14-alpine",
 		Command:   []string{"sleep", "3600"},
 		TTY:       true,
 		Stdin:     true,

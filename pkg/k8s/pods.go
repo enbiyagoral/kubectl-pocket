@@ -33,7 +33,7 @@ func (c *Client) CreatePod(ctx context.Context, config PodConfig) (*corev1.Pod, 
 			Namespace: config.Namespace,
 			Labels: map[string]string{
 				"app.kubernetes.io/managed-by": "kubectl-pocket",
-				"kubectl-pocket/temporary":    "true",
+				"kubectl-pocket/temporary":     "true",
 			},
 		},
 		Spec: corev1.PodSpec{
