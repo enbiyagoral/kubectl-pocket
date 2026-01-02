@@ -17,5 +17,5 @@ spec:
         os: darwin
         arch: arm64
     uri: https://github.com/enbiyagoral/kubectl-pocket/releases/download/v0.1.0/kubectl-pocket_darwin_arm64.tar.gz
-    sha256: "PLACEHOLDER"
+    sha256: "fb86e20fa66e6b3438f3966c9388f37e700e4a89d187d8be782acbfc73110b49"
     bin: kubectl-pocket
