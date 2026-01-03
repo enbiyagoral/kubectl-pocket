@@ -68,60 +68,64 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  update-krew-index:
-    needs: release
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Update new version in krew-index
-        uses: rajatjindal/krew-release-bot@v0.0.47
-        env:
-          GITHUB_REF: refs/tags/${{ inputs.version }}
-
-      - name: Update Krew manifest
-        run: |
-          VERSION=${{ inputs.version }}
-
-          # Create dist directory and download checksums.txt from release
-          mkdir -p dist
-          curl -L -o dist/checksums.txt \
-            "https://github.com/enbiyagoral/kubectl-pocket/releases/download/${VERSION}/checksums.txt"
-
-          sed -i "s|version: v.*|version: ${VERSION}|" plugins/pocket.yaml
-
-          sed -i "s|/download/v[^/]*/|/download/${VERSION}/|" plugins/pocket.yaml
-
-          SHA256_DARWIN_ARM64=$(grep "kubectl-pocket_darwin_arm64.tar.gz" dist/checksums.txt | cut -d ' ' -f 1)
-          SHA256_DARWIN_AMD64=$(grep "kubectl-pocket_darwin_amd64.tar.gz" dist/checksums.txt | cut -d ' ' -f 1)
-          SHA256_LINUX_AMD64=$(grep "kubectl-pocket_linux_amd64.tar.gz" dist/checksums.txt | cut -d ' ' -f 1)
-          SHA256_LINUX_ARM64=$(grep "kubectl-pocket_linux_arm64.tar.gz" dist/checksums.txt | cut -d ' ' -f 1)
-          SHA256_WINDOWS_AMD64=$(grep "kubectl-pocket_windows_amd64.tar.gz" dist/checksums.txt | cut -d ' ' -f 1)
-          SHA256_WINDOWS_ARM64=$(grep "kubectl-pocket_windows_arm64.tar.gz" dist/checksums.txt | cut -d ' ' -f 1)
-
-          awk -v darwin_arm64="${SHA256_DARWIN_ARM64}" \
-              -v darwin_amd64="${SHA256_DARWIN_AMD64}" \
-              -v linux_amd64="${SHA256_LINUX_AMD64}" \
-              -v linux_arm64="${SHA256_LINUX_ARM64}" \
-              -v windows_amd64="${SHA256_WINDOWS_AMD64}" \
-              -v windows_arm64="${SHA256_WINDOWS_ARM64}" '
-          /darwin_arm64\.tar\.gz$/ { next_sha256=darwin_arm64; next }
-          /darwin_amd64\.tar\.gz$/ { next_sha256=darwin_amd64; next }
-          /linux_amd64\.tar\.gz$/ { next_sha256=linux_amd64; next }
-          /linux_arm64\.tar\.gz$/ { next_sha256=linux_arm64; next }
-          /windows_amd64\.tar\.gz$/ { next_sha256=windows_amd64; next }
-          /windows_arm64\.tar\.gz$/ { next_sha256=windows_arm64; next }
-          /sha256:/ && next_sha256 != "" { gsub(/sha256: .*/, "sha256: " next_sha256); next_sha256="" }
-          { print }
-          ' plugins/pocket.yaml > plugins/pocket.yaml.tmp && mv plugins/pocket.yaml.tmp plugins/pocket.yaml
-
-      - name: Commit and push Krew manifest
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add plugins/pocket.yaml
-          git commit -m "chore: update krew manifest for ${{ inputs.version }}"
-          git push origin HEAD:main
+# NOTE: krew-release-bot is disabled for the first version (v0.1.1)
+# It will be enabled after the plugin is added to krew-index manually
+# Uncomment the update-krew-index job below after the first PR is merged
+#
+# update-krew-index:
+#   needs: release
+#   runs-on: ubuntu-latest
+#   steps:
+#     - uses: actions/checkout@v6
+#       with:
+#         fetch-depth: 0
+#         token: ${{ secrets.GITHUB_TOKEN }}
+#
+#     - name: Update new version in krew-index
+#       uses: rajatjindal/krew-release-bot@v0.0.47
+#       env:
+#         GITHUB_REF: refs/tags/${{ inputs.version }}
+#
+#     - name: Update Krew manifest
+#       run: |
+#         VERSION=${{ inputs.version }}
+#
+#         # Create dist directory and download checksums.txt from release
+#         mkdir -p dist
+#         curl -L -o dist/checksums.txt \
+#           "https://github.com/enbiyagoral/kubectl-pocket/releases/download/${VERSION}/checksums.txt"
+#
+#         sed -i "s|version: v.*|version: ${VERSION}|" plugins/pocket.yaml
+#
+#         sed -i "s|/download/v[^/]*/|/download/${VERSION}/|" plugins/pocket.yaml
+#
+#         SHA256_DARWIN_ARM64=$(grep "kubectl-pocket_darwin_arm64.tar.gz" dist/checksums.txt | cut -d ' ' -f 1)
+#         SHA256_DARWIN_AMD64=$(grep "kubectl-pocket_darwin_amd64.tar.gz" dist/checksums.txt | cut -d ' ' -f 1)
+#         SHA256_LINUX_AMD64=$(grep "kubectl-pocket_linux_amd64.tar.gz" dist/checksums.txt | cut -d ' ' -f 1)
+#         SHA256_LINUX_ARM64=$(grep "kubectl-pocket_linux_arm64.tar.gz" dist/checksums.txt | cut -d ' ' -f 1)
+#         SHA256_WINDOWS_AMD64=$(grep "kubectl-pocket_windows_amd64.tar.gz" dist/checksums.txt | cut -d ' ' -f 1)
+#         SHA256_WINDOWS_ARM64=$(grep "kubectl-pocket_windows_arm64.tar.gz" dist/checksums.txt | cut -d ' ' -f 1)
+#
+#         awk -v darwin_arm64="${SHA256_DARWIN_ARM64}" \
+#             -v darwin_amd64="${SHA256_DARWIN_AMD64}" \
+#             -v linux_amd64="${SHA256_LINUX_AMD64}" \
+#             -v linux_arm64="${SHA256_LINUX_ARM64}" \
+#             -v windows_amd64="${SHA256_WINDOWS_AMD64}" \
+#             -v windows_arm64="${SHA256_WINDOWS_ARM64}" '
+#         /darwin_arm64\.tar\.gz$/ { next_sha256=darwin_arm64; next }
+#         /darwin_amd64\.tar\.gz$/ { next_sha256=darwin_amd64; next }
+#         /linux_amd64\.tar\.gz$/ { next_sha256=linux_amd64; next }
+#         /linux_arm64\.tar\.gz$/ { next_sha256=linux_arm64; next }
+#         /windows_amd64\.tar\.gz$/ { next_sha256=windows_amd64; next }
+#         /windows_arm64\.tar\.gz$/ { next_sha256=windows_arm64; next }
+#         /sha256:/ && next_sha256 != "" { gsub(/sha256: .*/, "sha256: " next_sha256); next_sha256="" }
+#         { print }
+#         ' plugins/pocket.yaml > plugins/pocket.yaml.tmp && mv plugins/pocket.yaml.tmp plugins/pocket.yaml
+#
+#     - name: Commit and push Krew manifest
+#       run: |
+#         git config user.name "github-actions[bot]"
+#         git config user.email "github-actions[bot]@users.noreply.github.com"
+#         git add plugins/pocket.yaml
+#         git commit -m "chore: update krew manifest for ${{ inputs.version }}"
+#         git push origin HEAD:main
