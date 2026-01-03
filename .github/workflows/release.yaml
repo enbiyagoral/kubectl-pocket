@@ -34,7 +34,7 @@ jobs:
 
   release:
     needs: build-test
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
         with:
@@ -68,6 +68,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  update-krew-index:
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Update new version in krew-index
         uses: rajatjindal/krew-release-bot@v0.0.47
 
@@ -75,9 +84,14 @@ jobs:
         run: |
           VERSION=${{ inputs.version }}
 
-          sed -i '' "s|version: v.*|version: ${VERSION}|" plugins/pocket.yaml
+          # Create dist directory and download checksums.txt from release
+          mkdir -p dist
+          curl -L -o dist/checksums.txt \
+            "https://github.com/enbiyagoral/kubectl-pocket/releases/download/${VERSION}/checksums.txt"
 
-          sed -i '' "s|/download/v[^/]*/|/download/${VERSION}/|" plugins/pocket.yaml
+          sed -i "s|version: v.*|version: ${VERSION}|" plugins/pocket.yaml
+
+          sed -i "s|/download/v[^/]*/|/download/${VERSION}/|" plugins/pocket.yaml
 
           SHA256_DARWIN_ARM64=$(grep "kubectl-pocket_darwin_arm64.tar.gz" dist/checksums.txt | cut -d ' ' -f 1)
           SHA256_DARWIN_AMD64=$(grep "kubectl-pocket_darwin_amd64.tar.gz" dist/checksums.txt | cut -d ' ' -f 1)
