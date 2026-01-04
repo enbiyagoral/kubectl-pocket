@@ -3,7 +3,7 @@ kind: Plugin
 metadata:
   name: pocket
 spec:
-  version: v0.1.1
+  version: v0.1.0
   homepage: https://github.com/enbiyagoral/kubectl-pocket
   shortDescription: Test database connections and open shells in Kubernetes
   description: |
@@ -16,41 +16,35 @@ spec:
       matchLabels:
         os: darwin
         arch: arm64
-    uri: https://github.com/enbiyagoral/kubectl-pocket/releases/download/v0.1.1/kubectl-pocket_darwin_arm64.tar.gz
-    sha256: 4b47abb8cfa6d7ddf2de6296afd1d954d5286ae25f25b5b38552565f3c920c48
+    sha256: 3074fd36d3b259cde152aa5b73049822c52c398af43fdb1baf61041f77b950b9
     bin: kubectl-pocket
   - selector:
       matchLabels:
         os: darwin
         arch: amd64
-    uri: https://github.com/enbiyagoral/kubectl-pocket/releases/download/v0.1.1/kubectl-pocket_darwin_amd64.tar.gz
-    sha256: 1506427f3ee792fe91c2b49705514d23fc76ed1e6326157007ea23c1dff83a31
+    sha256: 9c841ba48b314795772b1ec65bb99eb4fe475798e2d05497efeb5879741e4310
     bin: kubectl-pocket
   - selector:
       matchLabels:
         os: linux
         arch: amd64
-    uri: https://github.com/enbiyagoral/kubectl-pocket/releases/download/v0.1.1/kubectl-pocket_linux_amd64.tar.gz
-    sha256: 12e1e0e54cc533b0fd714d9fcf1bd63f32ed2ddaea4be1a56b9c6c6d7ac3dedf
+    sha256: 42eff37e3bc51cd39505ea71930a250837c7fc39e43f5821559504a4c2b65048
     bin: kubectl-pocket
   - selector:
       matchLabels:
         os: linux
         arch: arm64
-    uri: https://github.com/enbiyagoral/kubectl-pocket/releases/download/v0.1.1/kubectl-pocket_linux_arm64.tar.gz
-    sha256: c5da0835c2a9c7f1918e75b24258bbf1d4276f7e13b160073f32cb89a7c70004
+    sha256: 68f4441e4339fdd08909eb7f320b57057c92604c9a7e0d6727f848a3ff9975a9
     bin: kubectl-pocket
   - selector:
       matchLabels:
         os: windows
         arch: amd64
-    uri: https://github.com/enbiyagoral/kubectl-pocket/releases/download/v0.1.1/kubectl-pocket_windows_amd64.tar.gz
-    sha256: cb2051ab06bab97a9d827fbed1b10d3ef8932b06e874c70594bb030a5e24d741
+    sha256: 2f842c360aad9d76b85ac4c4eb0d570ed2a0afe902eec569f537deea5f6bd173
     bin: kubectl-pocket.exe
   - selector:
       matchLabels:
         os: windows
         arch: arm64
-    uri: https://github.com/enbiyagoral/kubectl-pocket/releases/download/v0.1.1/kubectl-pocket_windows_arm64.tar.gz
-    sha256: 83068f145dc5a41a2ec38f76d2946ee21f70aeccc9f9144d56788de2c40f34bc
+    sha256: 6d9606117a6aee4a342bd302a4172346e7026ed210b0657e3bd6d31fcec8108b
     bin: kubectl-pocket.exe
