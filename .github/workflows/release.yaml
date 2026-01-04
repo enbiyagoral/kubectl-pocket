@@ -89,13 +89,13 @@ jobs:
               -v linux_arm64="${SHA256_LINUX_ARM64}" \
               -v windows_amd64="${SHA256_WINDOWS_AMD64}" \
               -v windows_arm64="${SHA256_WINDOWS_ARM64}" '
-          /darwin_arm64\.tar\.gz$/ { next_sha256=darwin_arm64; next }
-          /darwin_amd64\.tar\.gz$/ { next_sha256=darwin_amd64; next }
-          /linux_amd64\.tar\.gz$/ { next_sha256=linux_amd64; next }
-          /linux_arm64\.tar\.gz$/ { next_sha256=linux_arm64; next }
-          /windows_amd64\.tar\.gz$/ { next_sha256=windows_amd64; next }
-          /windows_arm64\.tar\.gz$/ { next_sha256=windows_arm64; next }
-          /sha256:/ && next_sha256 != "" { gsub(/sha256: .*/, "sha256: " next_sha256); next_sha256="" }
+          /uri:.*darwin_arm64/ { current=darwin_arm64 }
+          /uri:.*darwin_amd64/ { current=darwin_amd64 }
+          /uri:.*linux_amd64/ { current=linux_amd64 }
+          /uri:.*linux_arm64/ { current=linux_arm64 }
+          /uri:.*windows_amd64/ { current=windows_amd64 }
+          /uri:.*windows_arm64/ { current=windows_arm64 }
+          /sha256:/ && current != "" { gsub(/sha256: .*/, "sha256: " current); current="" }
           { print }
           ' plugins/pocket.yaml > plugins/pocket.yaml.tmp && mv plugins/pocket.yaml.tmp plugins/pocket.yaml
 
