@@ -16,35 +16,41 @@ spec:
       matchLabels:
         os: darwin
         arch: arm64
+    uri: https://github.com/enbiyagoral/kubectl-pocket/releases/download/v0.1.0/kubectl-pocket_darwin_arm64.tar.gz
     sha256: 3074fd36d3b259cde152aa5b73049822c52c398af43fdb1baf61041f77b950b9
     bin: kubectl-pocket
   - selector:
       matchLabels:
         os: darwin
         arch: amd64
+    uri: https://github.com/enbiyagoral/kubectl-pocket/releases/download/v0.1.0/kubectl-pocket_darwin_amd64.tar.gz
     sha256: 9c841ba48b314795772b1ec65bb99eb4fe475798e2d05497efeb5879741e4310
     bin: kubectl-pocket
   - selector:
       matchLabels:
         os: linux
         arch: amd64
+    uri: https://github.com/enbiyagoral/kubectl-pocket/releases/download/v0.1.0/kubectl-pocket_linux_amd64.tar.gz
     sha256: 42eff37e3bc51cd39505ea71930a250837c7fc39e43f5821559504a4c2b65048
     bin: kubectl-pocket
   - selector:
       matchLabels:
         os: linux
         arch: arm64
+    uri: https://github.com/enbiyagoral/kubectl-pocket/releases/download/v0.1.0/kubectl-pocket_linux_arm64.tar.gz
     sha256: 68f4441e4339fdd08909eb7f320b57057c92604c9a7e0d6727f848a3ff9975a9
     bin: kubectl-pocket
   - selector:
       matchLabels:
         os: windows
         arch: amd64
+    uri: https://github.com/enbiyagoral/kubectl-pocket/releases/download/v0.1.0/kubectl-pocket_windows_amd64.tar.gz
     sha256: 2f842c360aad9d76b85ac4c4eb0d570ed2a0afe902eec569f537deea5f6bd173
     bin: kubectl-pocket.exe
   - selector:
       matchLabels:
         os: windows
         arch: arm64
+    uri: https://github.com/enbiyagoral/kubectl-pocket/releases/download/v0.1.0/kubectl-pocket_windows_arm64.tar.gz
     sha256: 6d9606117a6aee4a342bd302a4172346e7026ed210b0657e3bd6d31fcec8108b
     bin: kubectl-pocket.exe
